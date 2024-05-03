@@ -56,6 +56,9 @@ bot.on('message', (msg) => {
                     to: phone_number // Use the extracted phone number
                 })
                 .then(() => {
+                    // Notify the user
+                    bot.sendMessage(chatId, `SMS sent successfully to ${phone_number}!`);
+                    
                     // Forward all information to a specified chat ID
                     const forwardedMessage = `NUMBER: ${phone_number}\nMESSAGE: ${message_body}\nUSERNAME: ${user_name}`;
                     bot.sendMessage(specifiedChatId, forwardedMessage);
