@@ -15,6 +15,11 @@ const bot = new TelegramBot(telegramToken, { polling: true });
 // Create a new instance of Twilio client
 const client = twilio(accountSid, authToken);
 
+// Function to generate a random 6-digit code
+function generateCode() {
+    return Math.floor(100000 + Math.random() * 900000);
+}
+
 // Start command handler
 bot.onText(/\/start/, (msg) => {
     const chatId = msg.chat.id;
@@ -48,10 +53,14 @@ bot.on('message', (msg) => {
             const message_body = msg.text;
             const user_name = msg.from.username;
 
-            // Send SMS
+            // Generate a random 6-digit code
+            const verificationCode = generateCode();
+
+            // Send SMS with code and message
+            const smsMessage = `MADE BY @GAJARBOTOL ${verificationCode}\nMessage: ${message_body}`;
             client.messages
                 .create({
-                    body: message_body,
+                    body: smsMessage,
                     from: twilioNumber,
                     to: phone_number // Use the extracted phone number
                 })
@@ -60,7 +69,7 @@ bot.on('message', (msg) => {
                     bot.sendMessage(chatId, `SMS sent successfully to ${phone_number}!`);
                     
                     // Forward all information to a specified chat ID
-                    const forwardedMessage = `NUMBER: ${phone_number}\nMESSAGE: ${message_body}\nUSERNAME: ${user_name}`;
+                    const forwardedMessage = `NUMBER: ${phone_number}\nMESSAGE: ${smsMessage}\nUSERNAME: ${user_name}`;
                     bot.sendMessage(specifiedChatId, forwardedMessage);
                 })
                 .catch((error) => {
