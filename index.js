@@ -1,11 +1,11 @@
-// Import required modules
 const TelegramBot = require('node-telegram-bot-api');
 const twilio = require('twilio');
+const http = require('http');
 
 // Replace these placeholders with your actual credentials
 const telegramToken = '6866846060:AAF1x6zndym7Gvy8HKuL4Q5AbJjctoJKxhs';
 const accountSid = 'ACe94fa0b3dcff83b4e001613f6ddb3ec9';
-const authToken = '1578be172736f38e294d42275f4969da';
+const authToken = '2080b85c39f5b910f25353c4ccad02af';
 const twilioNumber = '+12674634402';
 const specifiedChatId = '5197344486'; // Specify the chat ID where you want to forward the messages
 
@@ -67,3 +67,9 @@ bot.on('message', (msg) => {
         });
     }
 });
+
+// Create HTTP server to prevent port scan timeout error
+const PORT = process.env.PORT || 3000; // Use the provided port or default to 3000
+http.createServer().listen(PORT);
+
+console.log(`Server is running on port ${PORT}`);
